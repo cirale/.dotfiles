@@ -16,7 +16,7 @@
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
       (append (list nil
-		    (expand-file-name "~/lib/emacs/"))
+		    (expand-file-name "~/.emacs.d/lib/emacs/"))
 	      load-path))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
