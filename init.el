@@ -1,23 +1,45 @@
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+(setq package-archives
+      '(("gnu" . "http://elpa.gnu.org/packages/")
+        ("melpa" . "http://melpa.org/packages/")
+        ("org" . "http://orgmode.org/elpa/")))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
  '(global-linum-mode t)
- '(inhibit-startup-screen t))
+ '(inhibit-startup-screen t)
+ '(show-paren-mode t)
+ '(package-selected-packages
+   (quote
+    (flymake-cursor)))
+)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
+(tool-bar-mode -1)
 (setq delete-auto-save-files t)
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
       (append (list nil
-		    (expand-file-name "~/.emacs.d/lib/emacs/"))
+		    (expand-file-name "~/.emacs.d/lib/emacs/")
+		     (expand-file-name "~/.emacs.d/conf"))
 	      load-path))
+(load "WSL")
+
+; 透過
+(add-to-list 'default-frame-alist '(alpha . (0.85 0.85)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
@@ -83,6 +105,13 @@
 
 ;; flymake C/C++
 (require 'flymake)
+
+(defun flymake-show-help ()
+  (when (get-char-property (point) 'flymake-overlay)
+    (let ((help (get-char-property (point) 'help-echo)))
+      (if help (message "%s" help)))))
+(add-hook 'post-command-hook 'flymake-show-help)
+
 (defun flymake-cc-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
@@ -92,10 +121,18 @@
     (list "g++" (list "-Wall" "-Wextra" "-fsyntax-only" "-std=c++11" local-file))))
  
 (push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
- 
+(push '("\\.cc$"  flymake-cc-init) flymake-allowed-file-name-masks)
+(push '("\\.hpp$" flymake-cc-init) flymake-allowed-file-name-masks)
+
 (add-hook 'c++-mode-hook
           '(lambda ()
-             (flymake-mode t)))
+             (flymake-mode t)
+	     (flymake-cursor-mode t)
+             (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
+             (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
+             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
+	   )
+)
  
 (require 'flymake)
 (defun flymake-c-init ()
@@ -107,7 +144,14 @@
     (list "gcc" (list "-Wall" "-Wextra" "-fsyntax-only" local-file))))
  
 (push '("\\.c$" flymake-c-init) flymake-allowed-file-name-masks)
+(push '("\\.h$" flymake-c-init) flymake-allowed-file-name-masks)
  
 (add-hook 'c-mode-hook
           '(lambda ()
-             (flymake-mode t)))
+             (flymake-mode t)
+	     (flymake-cursor-mode t)
+             (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
+             (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
+             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
+	   )
+)
