@@ -36,7 +36,7 @@
 		    (expand-file-name "~/.emacs.d/lib/emacs/")
 		     (expand-file-name "~/.emacs.d/conf"))
 	      load-path))
-(load "WSL")
+;(load "WSL")
 
 ; 透過
 (add-to-list 'default-frame-alist '(alpha . (0.85 0.85)))
