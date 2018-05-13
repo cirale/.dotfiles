@@ -16,17 +16,14 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(show-paren-mode t)
- '(package-selected-packages
-   (quote
-    (flymake-cursor)))
-)
+ '(package-selected-packages (quote (flymake-python-pyflakes mozc-popup mozc-im mozc)))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ )
 (tool-bar-mode -1)
 (setq delete-auto-save-files t)
 (set-default-coding-systems 'utf-8-unix)
@@ -36,7 +33,8 @@
 		    (expand-file-name "~/.emacs.d/lib/emacs/")
 		     (expand-file-name "~/.emacs.d/conf"))
 	      load-path))
-;(load "WSL")
+(load "01WSL")
+(load "02python")
 
 ; 透過
 (add-to-list 'default-frame-alist '(alpha . (0.85 0.85)))
