@@ -1,4 +1,5 @@
-;jedi, flymake-python-pyflakes is necessary.
+;Jedi, flymake-python-pyflakes is necessary.
+; "pip install pyflakes" is necessary.
 (add-hook 'python-mode-hook
           '(lambda ()
 	     (jedi:setup)

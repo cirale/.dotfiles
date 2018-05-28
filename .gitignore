@@ -67,5 +67,7 @@ company-statistics-cache.el
 # anaconda-mode
 anaconda-mode/
 
-
 # End of https://www.gitignore.io/api/emacs
+
+/ac-comphist.dat
+/.python-environments/

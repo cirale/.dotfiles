@@ -16,7 +16,7 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (flymake-python-pyflakes mozc-popup mozc-im mozc)))
+ '(package-selected-packages (quote (yasnippet-snippets mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -30,14 +30,28 @@
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
       (append (list nil
-		    (expand-file-name "~/.emacs.d/lib/emacs/")
+		    (expand-file-name "~/.emacs.d/lib/")
 		     (expand-file-name "~/.emacs.d/conf"))
 	      load-path))
 (load "01WSL")
 (load "02python")
 
-; 透過
-(add-to-list 'default-frame-alist '(alpha . (0.85 0.85)))
+;サイズ
+(setq default-frame-alist
+  '(
+    (width . 110)
+    (height . 50)
+   ))
+
+(require 'yasnippet)
+;; 既存スニペットを挿入する
+(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
+;; 新規スニペットを作成するバッファを用意する
+(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
+;; 既存スニペットを閲覧・編集する
+(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
+
+(yas-global-mode 1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
