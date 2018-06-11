@@ -16,7 +16,7 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (yasnippet-snippets mozc-popup mozc-im mozc)))
+ '(package-selected-packages (quote (mwim mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -35,6 +35,10 @@
 	      load-path))
 (load "01WSL")
 (load "02python")
+
+;mwim: コードの先頭・末尾にジャンプ
+(global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
+(global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 
 ;サイズ
 (setq default-frame-alist
