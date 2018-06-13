@@ -40,6 +40,9 @@
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 
+;C-hでbackspace
+(keyboard-translate ?\C-h ?\C-?)
+
 ;サイズ
 (setq default-frame-alist
   '(
