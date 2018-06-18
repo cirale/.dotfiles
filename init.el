@@ -24,6 +24,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(set-language-environment "Japanese")
+(set-default 'buffer-file-coding-system 'utf-8-with-signature)
 (tool-bar-mode -1)
 (setq delete-auto-save-files t)
 (set-default-coding-systems 'utf-8-unix)
@@ -49,6 +51,9 @@
     (width . 110)
     (height . 50)
    ))
+
+;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
+(setq ring-bell-function 'ignore)
 
 (require 'yasnippet)
 ;; 既存スニペットを挿入する
