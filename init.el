@@ -27,7 +27,6 @@
 (set-language-environment "Japanese")
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
 (tool-bar-mode -1)
-(setq delete-auto-save-files t)
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
@@ -37,6 +36,14 @@
 	      load-path))
 (load "01WSL")
 (load "02python")
+
+; 一時ファイルを~/.emacs.d/tmpに作る
+(setq backup-directory-alist '((".*" . "~/.emacs.d/tmp")))
+(setq version-control t)
+(setq kept-new-versions 3)
+(setq delete-old-versions t)
+(setq auto-save-file-name-transforms   '((".*" "~/.emacs.d/tmp/" t)))
+(setq create-lockfiles nil)
 
 ;mwim: コードの先頭・末尾にジャンプ
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
