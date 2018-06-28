@@ -45,6 +45,9 @@
 (setq auto-save-file-name-transforms   '((".*" "~/.emacs.d/tmp/" t)))
 (setq create-lockfiles nil)
 
+; 保存時に行末のスペースを削除
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 ;mwim: コードの先頭・末尾にジャンプ
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
