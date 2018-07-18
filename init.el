@@ -16,7 +16,7 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (mwim mozc-popup mozc-im mozc)))
+ '(package-selected-packages (quote (company-irony irony mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -34,8 +34,10 @@
 		    (expand-file-name "~/.emacs.d/lib/")
 		     (expand-file-name "~/.emacs.d/conf"))
 	      load-path))
+
 (load "01WSL")
 (load "02python")
+(load "03cpp")
 
 ; 一時ファイルを~/.emacs.d/tmpに作る
 (setq backup-directory-alist '((".*" . "~/.emacs.d/tmp")))
@@ -55,6 +57,9 @@
 ;C-hでbackspace
 (keyboard-translate ?\C-h ?\C-?)
 
+;自動閉じ括弧
+(electric-pair-mode 1)
+
 ;サイズ
 (setq default-frame-alist
   '(
@@ -62,8 +67,21 @@
     (height . 50)
    ))
 
-;; 警告音もフラッシュも全て無効(警告音が完全に鳴らなくなるので注意)
+;; 警告音もフラッシュも全て無効
 (setq ring-bell-function 'ignore)
+
+;; company-mode
+(require 'company)
+(global-company-mode 1)
+(setq company-idle-delay 0)
+(setq company-minimum-prefix-length 1)
+(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+(global-set-key (kbd "C-M-i") 'company-complete)
+(define-key company-active-map (kbd "C-n") 'company-select-next)
+(define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-search-map (kbd "C-n") 'company-select-next)
+(define-key company-search-map (kbd "C-p") 'company-select-previous)
+(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
 
 (require 'yasnippet)
 ;; 既存スニペットを挿入する
@@ -78,8 +96,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
 ; tabbar-mode: バッファ上部にタブを表示する
-;   
-; - 参考ページ 
+;
+; - 参考ページ
 ; -- EmacsWiki - Tab Bar Mode:
 ;      http://www.emacswiki.org/cgi-bin/wiki/TabBarMode
 ; -- 見た目の変更 - Amit's Thoughts: Emacs: buffer tabs:
@@ -137,55 +155,29 @@
 ;; F4 で tabbar-mode
 (global-set-key [f4] 'tabbar-mode)
 
-;; flymake C/C++
-(require 'flymake)
+;; インストール済みパッケージのインポート/エクスポート
+(defun save-installed-packages ()
+  "Creates a file named ~/.emacs.d/emacs-packages containing all activated emacs packages."
+  (interactive)
+  (setq export-filename "~/.emacs.d/emacs-packages")
+  (if (file-exists-p export-filename) (delete-file export-filename))
+  (dolist (x package-activated-list)
+    (append-to-file
+     (format "%s\r\n" (symbol-name x))
+     nil export-filename))
+  (message "Done writing export file."))
 
-(defun flymake-show-help ()
-  (when (get-char-property (point) 'flymake-overlay)
-    (let ((help (get-char-property (point) 'help-echo)))
-      (if help (message "%s" help)))))
-(add-hook 'post-command-hook 'flymake-show-help)
-
-(defun flymake-cc-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-         (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "g++" (list "-Wall" "-Wextra" "-fsyntax-only" "-std=c++11" local-file))))
- 
-(push '("\\.cpp$" flymake-cc-init) flymake-allowed-file-name-masks)
-(push '("\\.cc$"  flymake-cc-init) flymake-allowed-file-name-masks)
-(push '("\\.hpp$" flymake-cc-init) flymake-allowed-file-name-masks)
-
-(add-hook 'c++-mode-hook
-          '(lambda ()
-             (flymake-mode t)
-	     (flymake-cursor-mode t)
-             (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
-             (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
-             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
-	   )
-)
- 
-(require 'flymake)
-(defun flymake-c-init ()
-  (let* ((temp-file   (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-         (local-file  (file-relative-name
-                       temp-file
-                       (file-name-directory buffer-file-name))))
-    (list "gcc" (list "-Wall" "-Wextra" "-fsyntax-only" local-file))))
- 
-(push '("\\.c$" flymake-c-init) flymake-allowed-file-name-masks)
-(push '("\\.h$" flymake-c-init) flymake-allowed-file-name-masks)
- 
-(add-hook 'c-mode-hook
-          '(lambda ()
-             (flymake-mode t)
-	     (flymake-cursor-mode t)
-             (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
-             (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
-             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
-	   )
-)
+(defun restore-packages ()
+  "Installs packages listed in ~/.emacs.d/emacs-packages."
+  (interactive)
+  (setq export-filename "~/.emacs.d/emacs-packages")
+  (if (file-exists-p export-filename)
+      (mapcar
+       (lambda (package)
+         (package-install 'package))
+       (with-temp-buffer
+         (insert-file-contents export-filename)
+         (split-string (buffer-string) "\n" t))
+       )
+    (message (format "Could not find %s. Cancelling package import." export-filename)))
+  )
