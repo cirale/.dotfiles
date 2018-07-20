@@ -16,7 +16,8 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(package-selected-packages (quote (company-irony irony mozc-popup mozc-im mozc)))
+ '(irony-additional-clang-options (quote ("-std=c++11")))
+ '(package-selected-packages (quote (dockerfile-mode mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -69,6 +70,11 @@
 
 ;; 警告音もフラッシュも全て無効
 (setq ring-bell-function 'ignore)
+
+;; mini-bufferで大文字小文字を区別しない
+(setq read-buffer-completion-ignore-case t)
+(setq read-file-name-completion-ignore-case t)
+
 
 ;; company-mode
 (require 'company)
