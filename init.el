@@ -18,7 +18,7 @@
  '(inhibit-startup-screen t)
  '(irony-additional-clang-options (quote ("-std=c++11")))
  '(package-selected-packages (quote (rainbow-delimiters mozc-popup mozc-im mozc)))
- '(show-paren-mode t)
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
