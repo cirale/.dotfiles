@@ -17,8 +17,8 @@
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
  '(irony-additional-clang-options (quote ("-std=c++11")))
- '(package-selected-packages (quote (dockerfile-mode mozc-popup mozc-im mozc)))
- '(show-paren-mode t))
+ '(package-selected-packages (quote (rainbow-delimiters mozc-popup mozc-im mozc)))
+ '(show-paren-mode t)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -98,6 +98,18 @@
 (define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
 
 (yas-global-mode 1)
+
+;; rainbow-delimiters:括弧ごとに色分け
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+;; 色変更
+(require 'cl-lib)
+(require 'color)
+(cl-loop
+ for index from 1 to rainbow-delimiters-max-face-count
+ do
+ (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
+   (cl-callf color-saturate-name (face-foreground face) 30)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;

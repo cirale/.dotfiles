@@ -16,5 +16,6 @@ mwim
 popup
 python-environment
 deferred
+rainbow-delimiters
 yasnippet-snippets
 yasnippet
