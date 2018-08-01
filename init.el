@@ -17,7 +17,7 @@
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
  '(irony-additional-clang-options (quote ("-std=c++11")))
- '(package-selected-packages (quote (rainbow-delimiters mozc-popup mozc-im mozc)))
+ '(package-selected-packages (quote (monokai-theme mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -25,6 +25,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(load-theme 'monokai t)
 (set-language-environment "Japanese")
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
 (tool-bar-mode -1)
@@ -110,6 +112,10 @@
  do
  (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
    (cl-callf color-saturate-name (face-foreground face) 30)))
+
+;;インデント可視化
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+(setq highlight-indent-guides-method 'character)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;

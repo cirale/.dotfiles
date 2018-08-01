@@ -4,11 +4,13 @@ company
 flymake-cursor
 flymake-python-pyflakes
 flymake-easy
+highlight-indent-guides
 irony
 jedi-core
 epc
 ctable
 concurrent
+monokai-theme
 mozc-im
 mozc-popup
 mozc
