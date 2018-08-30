@@ -16,15 +16,7 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
- '(irony-additional-clang-options (quote ("-std=c++11")))
- '(package-selected-packages (quote (monokai-theme mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (load-theme 'monokai t)
 (set-language-environment "Japanese")
@@ -33,10 +25,10 @@
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
-      (append (list nil
-		    (expand-file-name "~/.emacs.d/lib/")
-		     (expand-file-name "~/.emacs.d/conf"))
-	      load-path))
+    (append (list nil
+        (expand-file-name "~/.emacs.d/lib/")
+        (expand-file-name "~/.emacs.d/conf"))
+    load-path))
 (load "00util")
 (load "01WSL")
 (load "02python")
@@ -65,10 +57,8 @@
 
 ;サイズ
 (setq default-frame-alist
-  '(
-    (width . 110)
-    (height . 50)
-   ))
+  '((width . 110)
+    (height . 50)))
 
 ;; 警告音もフラッシュも全て無効
 (setq ring-bell-function 'ignore)
@@ -76,7 +66,6 @@
 ;; mini-bufferで大文字小文字を区別しない
 (setq read-buffer-completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
-
 
 ;; company-mode
 (require 'company)
@@ -114,14 +103,14 @@
    (cl-callf color-saturate-name (face-foreground face) 30)))
 
 ;;インデント可視化
-(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-(setq highlight-indent-guides-method 'character)
+;(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;(setq highlight-indent-guides-method 'character)
 
 ;; 自動インデントでスペースを使う
 (setq-default indent-tabs-mode nil)
 
 ;; タブ幅
-(setq default-tab-width 4)
+(setq default-tab-width 2)
 
 ;; タブと全角スペースを可視化
 (setq whitespace-style
