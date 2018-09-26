@@ -16,6 +16,8 @@
  '(column-number-mode t)
  '(global-linum-mode t)
  '(inhibit-startup-screen t)
+ '(irony-additional-clang-options (quote ("-std=c++11")))
+ '(package-selected-packages (quote (smooth-scroll mozc-popup mozc-im mozc)))
  '(show-paren-mode t))
 
 (load-theme 'monokai t)
@@ -135,6 +137,11 @@
       (kill-region (region-beginning) (region-end))
     (backward-kill-word 1)))
 (global-set-key "\C-w" 'backward-kill-word-or-kill-region)
+
+;;undo-tree
+(require 'undo-tree)
+(global-undo-tree-mode t)
+(global-set-key (kbd "M-/") 'undo-tree-redo)
 
 ;;tabbar-mode
 ;; scratch buffer 以外をまとめてタブに表示する

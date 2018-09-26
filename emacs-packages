@@ -1,10 +1,10 @@
 company-irony
 company-jedi
 company
+dockerfile-mode
 flymake-cursor
 flymake-python-pyflakes
 flymake-easy
-highlight-indent-guides
 irony
 jedi-core
 epc
@@ -19,5 +19,11 @@ popup
 python-environment
 deferred
 rainbow-delimiters
+rust-mode
+s
+tabbar-ruler
+mode-icons
+powerline
+tabbar
 yasnippet-snippets
 yasnippet
