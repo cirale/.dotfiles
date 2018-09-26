@@ -26,7 +26,7 @@
     $ sudo apt install emacs25 emacs25-el
     ```
 
-4. [vcxsrv](https://sourceforge.net/projects/vcxsrv/)をインストール
+4. [vcxsrv](https://sourceforge.net/projects/vcxsrv/)か[X410](https://www.microsoft.com/ja-jp/p/x410/9nlp712zmn9q)をインストール
 
 5. ~/.bashrcに追記
 
@@ -35,17 +35,7 @@
         TERM=eterm-color
     fi
 
-    umask 022
     export DISPLAY=localhost:0.0
-
-    (
-        command_path="/mnt/c/Program Files/VcXsrv/vcxsrv.exe"
-        command_name=$(basename "$command_path")
-
-        if ! tasklist.exe 2> /dev/null | fgrep -q "$command_name"; then
-            "$command_path" :0 -multiwindow -xkbmodel jp106 -xkblayout jp -clipboard -noprimary -wgl > /dev/null 2>&1 &
-        fi
-    )
     ```
 
 6. フォント共有設定
