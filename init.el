@@ -127,6 +127,13 @@
 (set-face-foreground 'whitespace-tab "LightSlateGray")
 (set-face-background 'whitespace-tab "DarkSlateGray")
 
+;; region がアクティブじゃない時のC-w
+(defun backward-kill-word-or-kill-region ()
+  (interactive)
+  (if (or (not transient-mark-mode) (region-active-p))
+      (kill-region (region-beginning) (region-end))
+    (backward-kill-word 1)))
+(global-set-key "\C-w" 'backward-kill-word-or-kill-region)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;
