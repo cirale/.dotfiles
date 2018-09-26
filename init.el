@@ -1,4 +1,4 @@
-;; Added by Package.el.  This must come before configurations of
+; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
@@ -22,6 +22,7 @@
 (set-language-environment "Japanese")
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
 (tool-bar-mode -1)
+(menu-bar-mode -1)
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
@@ -135,64 +136,68 @@
     (backward-kill-word 1)))
 (global-set-key "\C-w" 'backward-kill-word-or-kill-region)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;
-; tabbar-mode: バッファ上部にタブを表示する
-;
-; - 参考ページ
-; -- EmacsWiki - Tab Bar Mode:
-;      http://www.emacswiki.org/cgi-bin/wiki/TabBarMode
-; -- 見た目の変更 - Amit's Thoughts: Emacs: buffer tabs:
-;      http://amitp.blogspot.com/2007/04/emacs-buffer-tabs.html
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;tabbar-mode
 ;; scratch buffer 以外をまとめてタブに表示する
-(require 'cl) ; for emacs-22.0.50 on Vine Linux 4.2
- (when (require 'tabbar nil t)
-    (setq tabbar-buffer-groups-function
-	  (lambda (b) (list "All Buffers")))
-    (setq tabbar-buffer-list-function
-          (lambda ()
-            (remove-if
-             (lambda(buffer)
-               (find (aref (buffer-name buffer) 0) " *"))
-             (buffer-list))))
-    (tabbar-mode))
+(require 'tabbar)
+(tabbar-mode 1)
 
-;; Ctrl-Tab, Ctrl-Shift-Tab でタブを切り替える
-  (dolist (func '(tabbar-mode tabbar-forward-tab tabbar-forward-group tabbar-backward-tab tabbar-backward-group))
-    (autoload func "tabbar" "Tabs at the top of buffers and easy control-tab navigation"))
-  (defmacro defun-prefix-alt (name on-no-prefix on-prefix &optional do-always)
-    `(defun ,name (arg)
-       (interactive "P")
-       ,do-always
-       (if (equal nil arg)
-  	 ,on-no-prefix
-         ,on-prefix)))
-  (defun-prefix-alt shk-tabbar-next (tabbar-forward-tab) (tabbar-forward-group) (tabbar-mode 1))
-  (defun-prefix-alt shk-tabbar-prev (tabbar-backward-tab) (tabbar-backward-group) (tabbar-mode 1))
-  (global-set-key [(control tab)] 'shk-tabbar-next)
-  (global-set-key [(control shift tab)] 'shk-tabbar-prev)
+;; グループ化しない
+(setq tabbar-buffer-groups-function nil)
+
+;; 左に表示されるボタンを無効化
+(dolist (btn '(tabbar-buffer-home-button
+               tabbar-scroll-left-button
+               tabbar-scroll-right-button))
+  (set btn (cons (cons "" nil)
+                 (cons "" nil))))
+
+(global-set-key (kbd "<C-tab>") 'tabbar-forward-tab)
+(global-set-key (kbd "<C-iso-lefttab>") 'tabbar-backward-tab)
 
 ;; 外観変更
  (set-face-attribute
-   'tabbar-default-face nil
+   'tabbar-default nil
    :background "gray60")
   (set-face-attribute
-   'tabbar-unselected-face nil
+   'tabbar-unselected nil
    :background "gray85"
    :foreground "gray30"
    :box nil)
   (set-face-attribute
-   'tabbar-selected-face nil
+   'tabbar-selected nil
    :background "#f2f2f6"
    :foreground "black"
    :box nil)
   (set-face-attribute
-   'tabbar-button-face nil
+   'tabbar-button nil
    :box '(:line-width 1 :color "gray72" :style released-button))
   (set-face-attribute
-   'tabbar-separator-face nil
+   'tabbar-separator nil
    :height 0.7)
 
+(defvar my-tabbar-displayed-buffers
+  '("*vc-")
+  "*Regexps matches buffer names always included tabs.")
+
+(defun my-tabbar-buffer-list ()
+  "Return the list of buffers to show in tabs.
+Exclude buffers whose name starts with a space or an asterisk.
+The current buffer and buffers matches `my-tabbar-displayed-buffers'
+are always included."
+  (let* ((hides (list ?\  ?\*))
+         (re (regexp-opt my-tabbar-displayed-buffers))
+         (cur-buf (current-buffer))
+         (tabs (delq nil
+                     (mapcar (lambda (buf)
+                               (let ((name (buffer-name buf)))
+                                 (when (or (string-match re name)
+                                           (not (memq (aref name 0) hides)))
+                                   buf)))
+                             (buffer-list)))))
+    ;; Always include the current buffer.
+    (if (memq cur-buf tabs)
+        tabs
+      (cons cur-buf tabs))))
+(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
 ;; F4 で tabbar-mode
 (global-set-key [f4] 'tabbar-mode)
