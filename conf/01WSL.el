@@ -1,9 +1,3 @@
-; mozc, mozc-im, mozc-popup is neccesary.
-(custom-set-variables
-  '(package-selected-packages
-   (quote
-    (mozc-popup mozc-im mozc))))
-
 ;;font
 ;; デフォルト フォント
 (set-face-attribute 'default nil :family "Migu 2M" :height 100)

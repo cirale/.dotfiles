@@ -1,43 +1,80 @@
-; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+(if load-file-name
+    (setq user-emacs-directory (file-name-directory load-file-name)))
+;; package.el
+(require 'package)
+(setq package-user-dir "~/.emacs.d/elisp/elpa/")
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
 (package-initialize)
-(setq package-archives
-      '(("gnu" . "http://elpa.gnu.org/packages/")
-        ("melpa" . "http://melpa.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(global-linum-mode t)
- '(inhibit-startup-screen t)
- '(irony-additional-clang-options (quote ("-std=c++11")))
- '(package-selected-packages (quote (smooth-scroll mozc-popup mozc-im mozc)))
- '(show-paren-mode t))
+(defvar my/packages
+  '(company-irony
+    company-jedi
+    company
+    dockerfile-mode
+    flymake-cursor
+    flymake-python-pyflakes
+    flymake-easy
+    irony
+    jedi-core
+    epc
+    ctable
+    concurrent
+    monokai-theme
+    mozc-im
+    mozc-popup
+    mozc
+    mwim
+    popup
+    python-environment
+    deferred
+    rainbow-delimiters
+    rust-mode
+    s
+    tabbar-ruler
+    mode-icons
+    powerline
+    tabbar
+    undo-tree
+    undohist
+    yasnippet-snippets
+    yasnippet)
+  "A list of packages to install from MELPA at launch.")
 
+;; Install Melpa packages
+(dolist (package my/packages)
+  (when (or (not (package-installed-p package)))
+    (package-install package)))
+
+(require 'monokai-theme)
 (load-theme 'monokai t)
 (set-language-environment "Japanese")
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
+
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
 (setq load-path
     (append (list nil
-        (expand-file-name "~/.emacs.d/lib/")
+        (expand-file-name "~/.emacs.d/elisp/lib/")
         (expand-file-name "~/.emacs.d/conf"))
     load-path))
-(load "00util")
 (load "01WSL")
 (load "02python")
 (load "03cpp")
+;;ツールバー、メニューバーを表示しない
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 
-; 一時ファイルを~/.emacs.d/tmpに作る
+;;カーソル位置表示
+(column-number-mode t)
+;;行番号表示
+(global-linum-mode t)
+;;スタート画面を開かない
+(setq inhibit-startup-screen t)
+;;対応する括弧をハイライト
+(setq show-paren-mode t)
+
+;; 一時ファイルを~/.emacs.d/tmpに作る
 (setq backup-directory-alist '((".*" . "~/.emacs.d/tmp")))
 (setq version-control t)
 (setq kept-new-versions 3)
@@ -45,20 +82,20 @@
 (setq auto-save-file-name-transforms   '((".*" "~/.emacs.d/tmp/" t)))
 (setq create-lockfiles nil)
 
-; 保存時に行末のスペースを削除
+;; 保存時に行末のスペースを削除
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-;mwim: コードの先頭・末尾にジャンプ
+;; mwim: コードの先頭・末尾にジャンプ
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 
-;C-hでbackspace
+;; C-hでbackspace
 (keyboard-translate ?\C-h ?\C-?)
 
-;自動閉じ括弧
+;; 自動閉じ括弧
 (electric-pair-mode 1)
 
-;サイズ
+;; サイズ
 (setq default-frame-alist
   '((width . 110)
     (height . 50)))
@@ -105,10 +142,6 @@
  (let ((face (intern (format "rainbow-delimiters-depth-%d-face" index))))
    (cl-callf color-saturate-name (face-foreground face) 30)))
 
-;;インデント可視化
-;(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-;(setq highlight-indent-guides-method 'character)
-
 ;; 自動インデントでスペースを使う
 (setq-default indent-tabs-mode nil)
 
@@ -121,8 +154,7 @@
 (setq whitespace-space-regexp "\\(\x3000+\\)")
 (setq whitespace-display-mappings
       '((space-mark ?\x3000 [?\□])
-        (tab-mark   ?\t   [?\xBB ?\t])
-        ))
+        (tab-mark   ?\t   [?\xBB ?\t])))
 (require 'whitespace)
 (global-whitespace-mode 1)
 (set-face-foreground 'whitespace-space "LightSlateGray")
@@ -130,7 +162,7 @@
 (set-face-foreground 'whitespace-tab "LightSlateGray")
 (set-face-background 'whitespace-tab "DarkSlateGray")
 
-;; region がアクティブじゃない時のC-w
+;; region がアクティブじゃない時は、C-wで前の一単語を削除
 (defun backward-kill-word-or-kill-region ()
   (interactive)
   (if (or (not transient-mark-mode) (region-active-p))
@@ -208,3 +240,17 @@ are always included."
 (setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
 ;; F4 で tabbar-mode
 (global-set-key [f4] 'tabbar-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (mode-icons mwim mozc-popup mozc-im irony flymake-python-pyflakes company))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

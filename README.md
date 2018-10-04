@@ -56,3 +56,14 @@
     cd /mnt/c/Users/cirale/wsl/
     ./mozc_emacs_helper.exe "$@"
     ```
+
+## emacsセットアップ
+初回起動時以下を実行
+* Jediサーバインストール(要:virtualenv)
+    ```
+    M-x jedi:install-server RET
+    ```
+* ironyサーバインストール(要:cmake,clang,llvm,libclang-dev)
+    ```
+    M-x irony-install-server RET
+    ```

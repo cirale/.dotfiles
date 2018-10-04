@@ -73,3 +73,5 @@ anaconda-mode/
 /.python-environments/
 /irony/
 /url/
+/elisp
+!/elisp/lib

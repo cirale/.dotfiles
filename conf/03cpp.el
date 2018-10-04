@@ -22,14 +22,11 @@
 (add-hook 'c++-mode-hook
           '(lambda ()
              (flymake-mode t)
-	     (flymake-cursor-mode t)
+             (flymake-cursor-mode t)
              (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
              (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
-             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
-	   )
-)
+             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)))
 
-(require 'flymake)
 (defun flymake-c-init ()
   (let* ((temp-file   (flymake-init-create-temp-buffer-copy
                        'flymake-create-temp-inplace))
@@ -44,17 +41,15 @@
 (add-hook 'c-mode-hook
           '(lambda ()
              (flymake-mode t)
-	     (flymake-cursor-mode t)
+             (flymake-cursor-mode t)
              (local-set-key "\C-c\C-v" 'flymake-start-syntax-check)
              (local-set-key "\C-c\C-p" 'flymake-goto-prev-error)
-             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)
-	   )
-)
+             (local-set-key "\C-c\C-n" 'flymake-goto-next-error)))
 
 (require 'irony)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
-(custom-set-variables '(irony-additional-clang-options '("-std=c++11")))
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(setq irony-additional-clang-options '("-std=c++11"))
 (with-eval-after-load 'company
   (add-to-list 'company-backends 'company-irony)) ; backend追加

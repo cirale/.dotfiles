@@ -7,9 +7,7 @@
   (add-to-list 'company-backends 'company-jedi))
 ;; pyflakes
 (add-hook 'python-mode-hook
-	  '(lambda()
-	     (flymake-mode t)
-	     (require 'flymake-python-pyflakes)
-	     (flymake-python-pyflakes-load)
-	     )
-	  )
+          '(lambda()
+             (require 'flymake-python-pyflakes)
+             (flymake-mode t)
+             (flymake-python-pyflakes-load)))
