@@ -3,8 +3,8 @@
 ;; package.el
 (require 'package)
 (setq package-user-dir "~/.emacs.d/elisp/elpa/")
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (package-initialize)
 
 (defvar my/packages
@@ -38,21 +38,24 @@
     undo-tree
     undohist
     yasnippet-snippets
-    yasnippet)
+    yasnippet
+    yaml-mode)
   "A list of packages to install from MELPA at launch.")
 
 ;; Install Melpa packages
+(unless package-archive-contents (package-refresh-contents))
 (dolist (package my/packages)
-  (when (or (not (package-installed-p package)))
+  (unless (package-installed-p package)
     (package-install package)))
 
 (require 'monokai-theme)
 (load-theme 'monokai t)
+
 (set-language-environment "Japanese")
 (set-default 'buffer-file-coding-system 'utf-8-with-signature)
-
 (set-default-coding-systems 'utf-8-unix)
 (setq default-file-name-coding-system 'japanese-cp932-dos)
+
 (setq load-path
     (append (list nil
         (expand-file-name "~/.emacs.d/elisp/lib/")
@@ -61,6 +64,7 @@
 (load "01WSL")
 (load "02python")
 (load "03cpp")
+
 ;;ツールバー、メニューバーを表示しない
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -72,7 +76,7 @@
 ;;スタート画面を開かない
 (setq inhibit-startup-screen t)
 ;;対応する括弧をハイライト
-(setq show-paren-mode t)
+(show-paren-mode t)
 
 ;; 一時ファイルを~/.emacs.d/tmpに作る
 (setq backup-directory-alist '((".*" . "~/.emacs.d/tmp")))
@@ -247,7 +251,7 @@ are always included."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (mode-icons mwim mozc-popup mozc-im irony flymake-python-pyflakes company))))
+    (yaml-mode esup mode-icons mwim mozc-popup mozc-im irony flymake-python-pyflakes company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
