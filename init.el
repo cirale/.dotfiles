@@ -39,7 +39,8 @@
     undohist
     yasnippet-snippets
     yasnippet
-    yaml-mode)
+    yaml-mode
+    markdown-mode)
   "A list of packages to install from MELPA at launch.")
 
 ;; Install Melpa packages

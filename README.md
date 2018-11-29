@@ -11,7 +11,7 @@
     $ sudo apt upgrade
     ```
 
-2. locale変更と日本語マニュアルインストールとタイムゾーン変更
+2. locale変更と日本語マニュアルインストールとタイムゾーン変更(WLinuxなら不要)
 
     ```
     $ sudo apt install language-pack-ja language-pack-gnome-ja
@@ -27,18 +27,21 @@
     ```
 
 4. [vcxsrv](https://sourceforge.net/projects/vcxsrv/)か[X410](https://www.microsoft.com/ja-jp/p/x410/9nlp712zmn9q)をインストール
+   * WLinuxの場合初回起動より先にやるのがよさげ
 
 5. ~/.bashrcに追記
 
     ```bash
+    umask 022
     if [ "$INSIDE_EMACS" ]; then
         TERM=eterm-color
     fi
 
     export DISPLAY=localhost:0.0
+    alias ls="ls --color=auto"
     ```
 
-6. フォント共有設定
+6. フォント共有設定(WLinuxなら不要？)
 
     ```
     $ sudo ln -s /mnt/c/Windows/Fonts /usr/share/fonts/windows
@@ -59,7 +62,7 @@
 
 ## emacsセットアップ
 初回起動時以下を実行
-* Jediサーバインストール(要:virtualenv)
+* Jediサーバインストール(要:virtualenv,pyflakes)
     ```
     M-x jedi:install-server RET
     ```
