@@ -70,3 +70,15 @@
     ```
     M-x irony-install-server RET
     ```
+## その他ソフトウェアセットアップ
+### Dockerインストール
+Windows 10 October 2018 Update以降Dockerのインストールが楽になりました
+1. 管理者権限で以下のコマンドを実行
+   ```
+   $ sudo apt install -y zfsutils-linux  cgroup-bin cgroup-lite cgroup-tools cgroupfs-mount libcgroup1
+   $ sudo apt install -y docker.io
+   $ sudo cgroupfs-mount
+   $ sudo usermod -aG docker $USER
+   ```
+2. 以降，Windows再起動のたびに`sudo service docker start`を管理者権限で実行
+   * `cgroupfs-mout`もいるかも
