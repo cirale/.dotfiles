@@ -62,7 +62,7 @@
 
 ## emacsセットアップ
 初回起動時以下を実行
-* Jediサーバインストール(要:virtualenv,pyflakes)
+* Jediサーバインストール(要:virtualenv,flake8)
     ```
     M-x jedi:install-server RET
     ```

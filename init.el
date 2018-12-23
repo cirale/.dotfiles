@@ -12,9 +12,8 @@
     company-jedi
     company
     dockerfile-mode
-    flymake-cursor
-    flymake-python-pyflakes
-    flymake-easy
+    flycheck
+    flycheck-pos-tip
     irony
     jedi-core
     epc
@@ -40,7 +39,9 @@
     yasnippet-snippets
     yasnippet
     yaml-mode
-    markdown-mode)
+    markdown-mode
+    go-mode
+    company-go)
   "A list of packages to install from MELPA at launch.")
 
 ;; Install Melpa packages
@@ -65,6 +66,7 @@
 (load "01WSL")
 (load "02python")
 (load "03cpp")
+(load "04go")
 
 ;;ツールバー、メニューバーを表示しない
 (tool-bar-mode -1)
@@ -118,12 +120,23 @@
 (setq company-idle-delay 0)
 (setq company-minimum-prefix-length 1)
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
+(setq completion-ignore-case t)
+(setq company-dabbrev-downcase nil)
 (global-set-key (kbd "C-M-i") 'company-complete)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
 (define-key company-search-map (kbd "C-n") 'company-select-next)
 (define-key company-search-map (kbd "C-p") 'company-select-previous)
 (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
+
+;; flycheck
+(require 'flycheck)
+(require 'flycheck-pos-tip)
+(with-eval-after-load 'flycheck
+  (flycheck-pos-tip-mode))
+(define-key flycheck-mode-map (kbd "C-c n") 'flycheck-next-error)
+(define-key flycheck-mode-map (kbd "C-c p") 'flycheck-previous-error)
+
 
 (require 'yasnippet)
 ;; 既存スニペットを挿入する
@@ -245,3 +258,18 @@ are always included."
 (setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
 ;; F4 で tabbar-mode
 (global-set-key [f4] 'tabbar-mode)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
+ '(package-selected-packages
+   (quote
+    (flycheck-pos-tip company-go go-mode markdown-mode yaml-mode yasnippet-snippets undohist undo-tree tabbar-ruler rust-mode rainbow-delimiters mwim mozc-popup mozc-im monokai-theme flymake-python-pyflakes flymake-cursor dockerfile-mode company-jedi company-irony))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

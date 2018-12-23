@@ -5,9 +5,5 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (with-eval-after-load 'company
   (add-to-list 'company-backends 'company-jedi))
-;; pyflakes
-(add-hook 'python-mode-hook
-          '(lambda()
-             (require 'flymake-python-pyflakes)
-             (flymake-mode t)
-             (flymake-python-pyflakes-load)))
+;; flycheck
+(add-hook 'python-mode-hook 'flycheck-mode)
