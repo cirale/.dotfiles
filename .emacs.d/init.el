@@ -1,3 +1,15 @@
+
+
+
+
+
+
+
+
+
+
+
+
 (if load-file-name
     (setq user-emacs-directory (file-name-directory load-file-name)))
 ;; package.el
@@ -8,14 +20,7 @@
 (package-initialize)
 
 (defvar my/packages
-  '(company-irony
-    company-jedi
-    company
-    dockerfile-mode
-    flycheck
-    flycheck-pos-tip
-    irony
-    jedi-core
+  '(dockerfile-mode
     epc
     ctable
     concurrent
@@ -25,10 +30,8 @@
     mozc
     mwim
     popup
-    python-environment
     deferred
     rainbow-delimiters
-    rust-mode
     s
     tabbar-ruler
     mode-icons
@@ -36,12 +39,8 @@
     tabbar
     undo-tree
     undohist
-    yasnippet-snippets
-    yasnippet
     yaml-mode
-    markdown-mode
-    go-mode
-    company-go)
+    markdown-mode)
   "A list of packages to install from MELPA at launch.")
 
 ;; Install Melpa packages
@@ -113,40 +112,6 @@
 ;; mini-bufferで大文字小文字を区別しない
 (setq read-buffer-completion-ignore-case t)
 (setq read-file-name-completion-ignore-case t)
-
-;; company-mode
-(require 'company)
-(global-company-mode 1)
-(setq company-idle-delay 0)
-(setq company-minimum-prefix-length 1)
-(setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-(setq completion-ignore-case t)
-(setq company-dabbrev-downcase nil)
-(global-set-key (kbd "C-M-i") 'company-complete)
-(define-key company-active-map (kbd "C-n") 'company-select-next)
-(define-key company-active-map (kbd "C-p") 'company-select-previous)
-(define-key company-search-map (kbd "C-n") 'company-select-next)
-(define-key company-search-map (kbd "C-p") 'company-select-previous)
-(define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-
-;; flycheck
-(require 'flycheck)
-(require 'flycheck-pos-tip)
-(with-eval-after-load 'flycheck
-  (flycheck-pos-tip-mode))
-(define-key flycheck-mode-map (kbd "C-c n") 'flycheck-next-error)
-(define-key flycheck-mode-map (kbd "C-c p") 'flycheck-previous-error)
-
-
-(require 'yasnippet)
-;; 既存スニペットを挿入する
-(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
-;; 新規スニペットを作成するバッファを用意する
-(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
-;; 既存スニペットを閲覧・編集する
-(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
-
-(yas-global-mode 1)
 
 ;; rainbow-delimiters:括弧ごとに色分け
 (require 'rainbow-delimiters)
@@ -258,18 +223,3 @@ are always included."
 (setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
 ;; F4 で tabbar-mode
 (global-set-key [f4] 'tabbar-mode)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(flycheck-display-errors-function (function flycheck-pos-tip-error-messages))
- '(package-selected-packages
-   (quote
-    (flycheck-pos-tip company-go go-mode markdown-mode yaml-mode yasnippet-snippets undohist undo-tree tabbar-ruler rust-mode rainbow-delimiters mwim mozc-popup mozc-im monokai-theme flymake-python-pyflakes flymake-cursor dockerfile-mode company-jedi company-irony))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
